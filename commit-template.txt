@@ -1,0 +1,24 @@
+# commit message 格式如下:
+# :emoji: type: subject
+#
+# 示例:
+# ✨ feat: 添加新的文件操作功能
+# 🐛 fix: 修复文件保存bug
+# 📝 docs: 更新README文档
+# ♻️ refactor: 重构编辑器组件
+# 🎨 style: 更新UI样式
+# ⚡️ perf: 优化渲染性能
+# ✅ test: 添加单元测试
+# 🔧 chore: 更新构建配置
+#
+# emoji 参考:
+# ✨ :sparkles: 新功能
+# 🐛 :bug: 修复bug
+# 📝 :memo: 文档更新
+# ♻️ :recycle: 代码重构
+# 🎨 :art: 改进代码结构/格式
+# ⚡️ :zap: 性能优化
+# ✅ :white_check_mark: 添加测试
+# 🔧 :wrench: 修改配置文件
+# 🚀 :rocket: 部署功能
+# 🔥 :fire: 移除代码或文件 
