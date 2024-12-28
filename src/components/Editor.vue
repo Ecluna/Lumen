@@ -18,10 +18,12 @@
 </template>
 
 <script setup>
-import { ref, watch, defineExpose, onMounted } from 'vue'
+import { ref, watch, defineExpose, onMounted, defineEmits } from 'vue'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import { invoke } from '@tauri-apps/api'
+
+const emit = defineEmits(['content-changed'])
 
 // 初始化 markdown-it，配置代码高亮
 const md = new MarkdownIt({
@@ -86,6 +88,7 @@ const handleInput = async () => {
   htmlContent.value = md.render(markdownContent.value)
   // 自动保存到临时文件
   await invoke('save_temp_content', { content: markdownContent.value })
+  emit('content-changed')
 }
 
 // 处理文件拖放

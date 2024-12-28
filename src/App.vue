@@ -3,35 +3,82 @@
     <div class="toolbar">
       <button class="toolbar-button" @click="openFile">打开文件</button>
       <button class="toolbar-button" @click="saveFile">保存文件</button>
+      <span class="file-status" v-if="currentFile">
+        <span class="status-dot" :class="{ 'unsaved': hasUnsavedChanges }"></span>
+        {{ currentFileName }}
+      </span>
     </div>
     <div class="main-content">
       <FileManager 
         ref="fileManagerRef"
-        :current-file="currentFile" 
+        :current-file="currentFile"
+        :has-external-changes="hasExternalChanges"
         @file-selected="handleFileSelected" 
       />
-      <Editor ref="editorRef" />
+      <Editor 
+        ref="editorRef"
+        @content-changed="handleContentChanged"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { invoke } from '@tauri-apps/api'
-import { dialog } from '@tauri-apps/api'
+import { dialog, notification } from '@tauri-apps/api'
+import { basename } from '@tauri-apps/api/path'
 import Editor from './components/Editor.vue'
 import FileManager from './components/FileManager.vue'
 
 const editorRef = ref(null)
 const fileManagerRef = ref(null)
 const currentFile = ref(null)
+const hasUnsavedChanges = ref(false)
+const hasExternalChanges = ref(false)
+const currentFileName = ref('')
+
+// 处理内容变更
+const handleContentChanged = () => {
+  hasUnsavedChanges.value = true
+}
+
+// 更新当前文件名
+const updateCurrentFileName = async () => {
+  if (currentFile.value) {
+    currentFileName.value = await basename(currentFile.value)
+  } else {
+    currentFileName.value = '未命名'
+  }
+}
 
 // 处理文件选择
 const handleFileSelected = async ({ path, content }) => {
+  if (hasUnsavedChanges.value) {
+    const confirmed = await dialog.ask('有未保存的更改，是否继续？', {
+      title: '确认',
+      type: 'warning'
+    })
+    if (!confirmed) return
+  }
+
   currentFile.value = path
   editorRef.value?.setContent(content)
   await invoke('add_recent_file', { path })
-  await fileManagerRef.value?.refreshFiles()  // 刷新文件列表
+  await fileManagerRef.value?.refreshFiles()
+  hasUnsavedChanges.value = false
+  hasExternalChanges.value = false
+  await updateCurrentFileName()
+}
+
+// 处理外部文件变更
+const handleExternalChanges = async () => {
+  hasExternalChanges.value = true
+  await notification.sendNotification({
+    title: '文件已被修改',
+    body: `文件 ${currentFileName.value} 已被外部程序修改`,
+    icon: 'warning'
+  })
 }
 
 const openFile = async () => {
@@ -70,8 +117,16 @@ const saveFile = async () => {
       if (!currentFile.value) {
         currentFile.value = filePath
         await invoke('add_recent_file', { path: filePath })
-        await fileManagerRef.value?.refreshFiles()  // 刷新文件列表
+        await fileManagerRef.value?.refreshFiles()
+        await updateCurrentFileName()
       }
+      hasUnsavedChanges.value = false
+      hasExternalChanges.value = false
+      await notification.sendNotification({
+        title: '保存成功',
+        body: `文件 ${currentFileName.value} 已保存`,
+        icon: 'success'
+      })
     }
   } catch (err) {
     console.error('保存文件失败:', err)
@@ -133,5 +188,29 @@ body {
 
 .editor-container {
   flex: 1;
+}
+
+.file-status {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background-color: #4caf50;
+}
+
+.status-dot.unsaved {
+  background-color: #ff9800;
+}
+
+.file-status.has-external-changes {
+  color: #f44336;
 }
 </style>
