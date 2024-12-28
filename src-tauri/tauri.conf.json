@@ -23,6 +23,9 @@
         "readDir": true,
         "exists": true,
         "scope": ["**"]
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {

@@ -4,17 +4,32 @@
       <button class="toolbar-button" @click="openFile">打开文件</button>
       <button class="toolbar-button" @click="saveFile">保存文件</button>
     </div>
-    <Editor ref="editorRef" />
+    <div class="main-content">
+      <FileManager 
+        :current-file="currentFile" 
+        @file-selected="handleFileSelected" 
+      />
+      <Editor ref="editorRef" />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import Editor from './components/Editor.vue'
 import { invoke } from '@tauri-apps/api'
 import { dialog } from '@tauri-apps/api'
+import Editor from './components/Editor.vue'
+import FileManager from './components/FileManager.vue'
 
 const editorRef = ref(null)
+const currentFile = ref(null)
+
+// 处理文件选择
+const handleFileSelected = async ({ path, content }) => {
+  currentFile.value = path
+  editorRef.value?.setContent(content)
+  await invoke('add_recent_file', { path })
+}
 
 const openFile = async () => {
   try {
@@ -27,7 +42,7 @@ const openFile = async () => {
     
     if (selected) {
       const content = await invoke('open_file', { path: selected })
-      editorRef.value?.setContent(content)
+      handleFileSelected({ path: selected, content })
     }
   } catch (err) {
     console.error('打开文件失败:', err)
@@ -36,7 +51,7 @@ const openFile = async () => {
 
 const saveFile = async () => {
   try {
-    const filePath = await dialog.save({
+    const filePath = currentFile.value || await dialog.save({
       filters: [{
         name: 'Markdown',
         extensions: ['md']
@@ -49,6 +64,10 @@ const saveFile = async () => {
         path: filePath,
         content
       })
+      if (!currentFile.value) {
+        currentFile.value = filePath
+        await invoke('add_recent_file', { path: filePath })
+      }
     }
   } catch (err) {
     console.error('保存文件失败:', err)
@@ -100,5 +119,15 @@ body {
 
 .toolbar-button:active {
   background-color: #e8e8e8;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.editor-container {
+  flex: 1;
 }
 </style>
