@@ -5,8 +5,6 @@
 )]
 
 use std::fs;
-use std::path::PathBuf;
-use tauri::Manager;
 
 #[tauri::command]
 async fn save_file(content: String, path: String) -> Result<(), String> {
