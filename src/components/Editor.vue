@@ -42,7 +42,7 @@ const md = new MarkdownIt({
 
 const initialContent = `# 欢迎使用 Markdown 编辑器
 
-## 基本功能
+## 基本功��
 
 1. 实时预览
 2. 文件保存/打开
@@ -125,8 +125,9 @@ defineExpose({
 
 .editor-container {
   display: flex;
-  height: calc(100vh - 50px); /* 减去工具栏高度 */
+  height: calc(100vh - 50px);
   width: 100%;
+  transition: width 0.3s ease;
 }
 
 .editor-wrapper,
@@ -134,6 +135,7 @@ defineExpose({
   width: 50%;
   padding: 20px;
   overflow-y: auto;
+  transition: width 0.3s ease;
 }
 
 .markdown-input {

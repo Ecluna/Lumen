@@ -121,10 +121,12 @@ onUnmounted(() => {
 <style scoped>
 .file-manager {
   width: 250px;
+  min-width: 250px;
   border-right: 1px solid #e1e4e8;
   background-color: #f6f8fa;
   height: 100%;
   overflow-y: auto;
+  transition: all 0.3s ease;
 }
 
 .recent-files {

@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
     <div class="toolbar">
+      <button class="toolbar-button" @click="toggleFileManager">
+        <span class="icon">📁</span>
+      </button>
       <button class="toolbar-button" @click="openFile">打开文件</button>
       <button class="toolbar-button" @click="saveFile">保存文件</button>
       <span class="file-status" v-if="currentFile">
@@ -13,18 +16,21 @@
         ref="fileManagerRef"
         :current-file="currentFile"
         :has-external-changes="hasExternalChanges"
-        @file-selected="handleFileSelected" 
+        @file-selected="handleFileSelected"
+        v-show="showFileManager"
+        :class="{ 'file-manager-hidden': !showFileManager }"
       />
       <Editor 
         ref="editorRef"
         @content-changed="handleContentChanged"
+        :class="{ 'editor-full': !showFileManager }"
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { invoke } from '@tauri-apps/api'
 import { dialog, notification } from '@tauri-apps/api'
 import { basename } from '@tauri-apps/api/path'
@@ -37,6 +43,7 @@ const currentFile = ref(null)
 const hasUnsavedChanges = ref(false)
 const hasExternalChanges = ref(false)
 const currentFileName = ref('')
+const showFileManager = ref(true)
 
 // 处理内容变更
 const handleContentChanged = () => {
@@ -132,6 +139,21 @@ const saveFile = async () => {
     console.error('保存文件失败:', err)
   }
 }
+
+// 切换文件管理器显示
+const toggleFileManager = () => {
+  showFileManager.value = !showFileManager.value
+  // 保存用户偏好
+  localStorage.setItem('showFileManager', showFileManager.value.toString())
+}
+
+// 初始化时读取用户偏好
+onMounted(() => {
+  const savedPreference = localStorage.getItem('showFileManager')
+  if (savedPreference !== null) {
+    showFileManager.value = savedPreference === 'true'
+  }
+})
 </script>
 
 <style>
@@ -212,5 +234,43 @@ body {
 
 .file-status.has-external-changes {
   color: #f44336;
+}
+
+.icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* 添加过渡动画 */
+.file-manager {
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+
+.file-manager-hidden {
+  transform: translateX(-100%);
+  width: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.editor-full {
+  width: 100%;
+}
+
+/* 修改工具栏按钮样式 */
+.toolbar-button:first-child {
+  padding: 6px 8px;
+  margin-right: 16px;
+}
+
+.toolbar-button:first-child:hover {
+  background-color: #e8e8e8;
+}
+
+.toolbar-button:first-child.active {
+  background-color: #0366d6;
+  color: white;
+  border-color: #0366d6;
 }
 </style>
