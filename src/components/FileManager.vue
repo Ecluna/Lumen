@@ -51,6 +51,15 @@ const loadRecentFiles = async () => {
   }
 }
 
+// 暴露刷新方法给父组件
+const refreshFiles = async () => {
+  await loadRecentFiles()
+}
+
+defineExpose({
+  refreshFiles
+})
+
 // 打开最近的文件
 const openRecentFile = async (path) => {
   try {

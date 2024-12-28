@@ -6,6 +6,7 @@
     </div>
     <div class="main-content">
       <FileManager 
+        ref="fileManagerRef"
         :current-file="currentFile" 
         @file-selected="handleFileSelected" 
       />
@@ -22,6 +23,7 @@ import Editor from './components/Editor.vue'
 import FileManager from './components/FileManager.vue'
 
 const editorRef = ref(null)
+const fileManagerRef = ref(null)
 const currentFile = ref(null)
 
 // 处理文件选择
@@ -29,6 +31,7 @@ const handleFileSelected = async ({ path, content }) => {
   currentFile.value = path
   editorRef.value?.setContent(content)
   await invoke('add_recent_file', { path })
+  await fileManagerRef.value?.refreshFiles()  // 刷新文件列表
 }
 
 const openFile = async () => {
@@ -42,7 +45,7 @@ const openFile = async () => {
     
     if (selected) {
       const content = await invoke('open_file', { path: selected })
-      handleFileSelected({ path: selected, content })
+      await handleFileSelected({ path: selected, content })
     }
   } catch (err) {
     console.error('打开文件失败:', err)
@@ -67,6 +70,7 @@ const saveFile = async () => {
       if (!currentFile.value) {
         currentFile.value = filePath
         await invoke('add_recent_file', { path: filePath })
+        await fileManagerRef.value?.refreshFiles()  // 刷新文件列表
       }
     }
   } catch (err) {

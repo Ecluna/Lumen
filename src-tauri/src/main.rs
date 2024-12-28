@@ -111,7 +111,7 @@ async fn check_file_changes(path: String) -> Result<bool, String> {
 async fn save_file(content: String, path: String) -> Result<(), String> {
     fs::write(&path, &content).map_err(|e| e.to_string())?;
     
-    // 更新最后修改时间
+    // 更新最后修改时间并添加到最近文件
     let mut state = load_app_state();
     let now = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
@@ -120,15 +120,50 @@ async fn save_file(content: String, path: String) -> Result<(), String> {
     
     if let Some(file) = state.recent_files.iter_mut().find(|f| f.path == path) {
         file.last_modified = now;
-        save_app_state(&state)?;
+        file.last_opened = now;
+    } else {
+        state.recent_files.push(RecentFile {
+            path: path.clone(),
+            last_modified: now,
+            last_opened: now,
+        });
     }
     
+    // 保持最近文件列表在10个以内
+    state.recent_files.sort_by(|a, b| b.last_opened.cmp(&a.last_opened));
+    state.recent_files.truncate(10);
+    
+    save_app_state(&state)?;
     Ok(())
 }
 
 #[tauri::command]
 async fn open_file(path: String) -> Result<String, String> {
-    fs::read_to_string(path).map_err(|e| e.to_string())
+    let content = fs::read_to_string(&path).map_err(|e| e.to_string())?;
+    
+    // 更新最后打开时间
+    let mut state = load_app_state();
+    let now = SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+    
+    if let Some(file) = state.recent_files.iter_mut().find(|f| f.path == path) {
+        file.last_opened = now;
+    } else {
+        state.recent_files.push(RecentFile {
+            path: path.clone(),
+            last_modified: now,
+            last_opened: now,
+        });
+    }
+    
+    // 保持最近文件列表在10个以内
+    state.recent_files.sort_by(|a, b| b.last_opened.cmp(&a.last_opened));
+    state.recent_files.truncate(10);
+    
+    save_app_state(&state)?;
+    Ok(content)
 }
 
 #[tauri::command]
