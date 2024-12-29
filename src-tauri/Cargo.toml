@@ -1,10 +1,10 @@
 [package]
 name = "lumen"
 version = "0.1.0"
-description = "A Markdown Editor"
-authors = ["you"]
-license = ""
-repository = ""
+description = "一个优雅的 Markdown 编辑器"
+authors = ["Ecluna"]
+license = "MIT"
+repository = "https://github.com/Ecluna/lumen"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

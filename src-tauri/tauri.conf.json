@@ -46,7 +46,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.lumen.dev",
+      "identifier": "com.ecluna.lumen",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -61,7 +61,10 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "wix": {
+          "language": ["zh-CN"]
+        }
       }
     },
     "security": {
