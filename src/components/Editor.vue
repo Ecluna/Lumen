@@ -31,7 +31,9 @@
             placeholder="请输入 Markdown 内容..."
           ></textarea>
         </div>
-        <div class="preview-wrapper markdown-body" v-html="htmlContent"></div>
+        <div class="preview-wrapper">
+          <div class="markdown-body" v-html="htmlContent"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -42,6 +44,8 @@ import { ref, watch, defineExpose, onMounted, defineEmits } from 'vue'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import { invoke } from '@tauri-apps/api'
+import Simplebar from 'simplebar-vue'
+import 'simplebar-vue/dist/simplebar.min.css'
 
 const emit = defineEmits(['content-changed'])
 
@@ -208,28 +212,24 @@ defineExpose({
   flex: 1;
   display: flex;
   min-height: 0;
-  overflow: hidden; /* 隐藏中间的滚动条 */
 }
 
-/* 调整编辑器和预览区域样式 */
-.editor-wrapper {
+/* 编辑器和预览区域基础样式 */
+.editor-wrapper,
+.preview-wrapper {
   flex: 1;
-  padding: 20px;
-  padding-bottom: 80px; /* 增加更多底部内边距 */
+  position: relative;
+  overflow: hidden;
 }
 
 .preview-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  padding-bottom: 80px; /* 增加更多底部内边距 */
   border-left: 1px solid #e1e4e8;
 }
 
 /* 编辑器输入区域样式 */
 .markdown-input {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   border: none;
   resize: none;
   outline: none;
@@ -237,25 +237,58 @@ defineExpose({
   font-size: 14px;
   line-height: 1.6;
   background: transparent;
-  overflow-y: auto;
-  padding-bottom: 40px; /* 为输入框内容添加底部间距 */
+  padding: 20px;
+  padding-bottom: 80px;
+  overflow-y: auto; /* 只在 textarea 上保留滚动 */
 }
 
-/* 预览区域样式 */
-.preview-wrapper {
-  border-left: 1px solid #e1e4e8;
+/* 自定义滚动条样式 - 应用到 textarea */
+.markdown-input::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* 预览区域的基础样式 */
+.markdown-input::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.markdown-input::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.markdown-input:hover::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+
+.markdown-input:hover::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+/* 移除滚动条按钮 */
+.markdown-input::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* 移除外层容器的滚动 */
+.editor-wrapper {
+  overflow: hidden;
+}
+
+/* 预览内容容器样式 */
 .markdown-body {
+  height: 100%;
+  padding: 20px;
+  padding-bottom: 80px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   word-wrap: break-word;
   color: #24292e;
-  padding-bottom: 40px; /* 增加预览内容的底部间距 */
+  overflow-y: auto;
 }
 
+/* Markdown 样式 */
 .markdown-body pre {
   padding: 16px;
   overflow: auto;
@@ -278,12 +311,6 @@ defineExpose({
   background-color: transparent;
 }
 
-.markdown-body h1,
-.markdown-body h2 {
-  border-bottom: 1px solid #eaecef;
-  padding-bottom: 0.3em;
-}
-
 .markdown-body blockquote {
   padding: 0 1em;
   color: #6a737d;
@@ -291,83 +318,63 @@ defineExpose({
   margin: 1em 0;
 }
 
-.markdown-body table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 1em 0;
+/* SimpleBar 自定义样式 */
+.simplebar-scrollbar::before {
+  background-color: #ccc;
+  width: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-.markdown-body table th,
-.markdown-body table td {
-  padding: 6px 13px;
-  border: 1px solid #dfe2e5;
+.simplebar-scrollbar.simplebar-visible::before {
+  opacity: 0.4;
 }
 
-.markdown-body table tr:nth-child(2n) {
-  background-color: #f6f8fa;
-}
-
-/* 隐藏侧边栏时的样式 */
-.sidebar-hidden .sidebar {
-  width: 0;
-  padding: 0;
-  border: none;
-  overflow: hidden;
-}
-
-/* 最后一个元素的额外间距 */
-.markdown-body > *:last-child {
-  margin-bottom: 40px; /* 确保最后一个元素有足够的底部间距 */
-}
-
-/* 美化滚动条样式 */
-.editor-wrapper::-webkit-scrollbar,
-.preview-wrapper::-webkit-scrollbar,
-.markdown-input::-webkit-scrollbar {
+.simplebar-track.simplebar-vertical {
   width: 6px;
-  height: 6px;
+  right: 2px;
 }
 
-/* 移除上下箭头按钮 */
-.editor-wrapper::-webkit-scrollbar-button,
-.preview-wrapper::-webkit-scrollbar-button,
-.markdown-input::-webkit-scrollbar-button {
-  display: none;
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:hover::before {
+  background-color: #999;
+  opacity: 0.6;
 }
 
-.editor-wrapper::-webkit-scrollbar-track,
-.preview-wrapper::-webkit-scrollbar-track,
-.markdown-input::-webkit-scrollbar-track {
+/* 移除重复的样式定义 */
+/* 删除所有重复的 SimpleBar 相关样式 */
+/* 删除所有重复的滚动条相关样式 */
+
+/* 自定义滚动条样式 - 应用到 textarea 和预览区 */
+.markdown-input::-webkit-scrollbar,
+.markdown-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.markdown-input::-webkit-scrollbar-track,
+.markdown-body::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.editor-wrapper::-webkit-scrollbar-thumb,
-.preview-wrapper::-webkit-scrollbar-thumb,
-.markdown-input::-webkit-scrollbar-thumb {
-  background: #ccc;
+.markdown-input::-webkit-scrollbar-thumb,
+.markdown-body::-webkit-scrollbar-thumb {
+  background-color: transparent;
   border-radius: 3px;
-  transition: background 0.2s ease;
+  transition: background-color 0.2s;
 }
 
-/* 悬浮时的滚动条样式 */
-.editor-wrapper::-webkit-scrollbar-thumb:hover,
-.preview-wrapper::-webkit-scrollbar-thumb:hover,
-.markdown-input::-webkit-scrollbar-thumb:hover {
-  background: #999; /* 深一点的灰色 */
+.markdown-input:hover::-webkit-scrollbar-thumb,
+.markdown-body:hover::-webkit-scrollbar-thumb {
+  background-color: #ccc;
 }
 
-/* 确保滚动条只在需要时显示 */
-.editor-wrapper,
-.preview-wrapper,
-.markdown-input {
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #ccc transparent; /* Firefox */
+.markdown-input:hover::-webkit-scrollbar-thumb:hover,
+.markdown-body:hover::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
 }
 
-/* 当内容滚动时才显示滚动条 */
-.editor-wrapper:not(:hover)::-webkit-scrollbar-thumb,
-.preview-wrapper:not(:hover)::-webkit-scrollbar-thumb,
-.markdown-input:not(:hover)::-webkit-scrollbar-thumb {
-  background: transparent;
+/* 移除滚动条按钮 */
+.markdown-input::-webkit-scrollbar-button,
+.markdown-body::-webkit-scrollbar-button {
+  display: none;
 }
 </style> 
