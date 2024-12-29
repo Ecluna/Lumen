@@ -53,7 +53,7 @@
           </button>
         </div>
         <div class="status-right">
-          <span class="word-count">0 词</span>
+          <span class="word-count">{{ wordCount }} 词</span>
         </div>
       </div>
     </div>
@@ -137,10 +137,29 @@ const toggleOutline = () => {
   showOutline.value = !showOutline.value
 }
 
+// 添加字数统计
+const wordCount = ref(0)
+
+// 更新字数统计
+const updateWordCount = () => {
+  // 移除 Markdown 语法标记
+  const cleanText = markdownContent.value
+    .replace(/```[\s\S]*?```/g, '') // 移除代码块
+    .replace(/`.*?`/g, '')          // 移除行内代码
+    .replace(/\[.*?\]/g, '')        // 移除链接文本
+    .replace(/\(.*?\)/g, '')        // 移除链接地址
+    .replace(/[#*_~>]/g, '')        // 移除其他 Markdown 标记
+    .trim()
+  
+  // 使用中文分词统计
+  const words = cleanText.match(/[\u4e00-\u9fa5]|[a-zA-Z0-9]+/g) || []
+  wordCount.value = words.length
+}
+
 // 处理输入
 const handleInput = async () => {
   htmlContent.value = md.render(markdownContent.value)
-  // 自动保存到临时文件
+  updateWordCount() // 添加字数统计更新
   await invoke('save_temp_content', { content: markdownContent.value })
   emit('content-changed')
 }
@@ -619,5 +638,16 @@ defineExpose({
 .status-btn.active .icon-close {
   opacity: 1;
   transform: rotate(0);
+}
+
+.word-count {
+  color: #57606a;
+  font-size: 12px;
+  user-select: none;
+}
+
+/* 修改 status-btn 的 tooltip 样式 */
+.status-btn[title]::after {
+  display: none; /* 禁用重复的 tooltip */
 }
 </style> 
