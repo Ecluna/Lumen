@@ -31,7 +31,9 @@
             @mousedown="startResize"
             @dblclick="resetSize">
           </div>
-          <div class="preview-wrapper" :style="{ flex: previewFlex }">
+          <div class="preview-wrapper" 
+            :class="{ 'preview-hidden': !showPreview }" 
+            :style="{ flex: previewFlex }">
             <div class="markdown-body" v-html="htmlContent"></div>
           </div>
         </div>
@@ -282,6 +284,14 @@ const handleEditorKeydown = (e) => {
     fontSize.value = 14
   }
 }
+
+// 添加 props
+defineProps({
+  showPreview: {
+    type: Boolean,
+    default: true
+  }
+})
 
 defineExpose({
   setContent,
@@ -676,5 +686,17 @@ defineExpose({
 
 .markdown-body :not(pre) > code {
   font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+/* 添加预览区域的过渡效果 */
+.preview-wrapper {
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.preview-hidden {
+  width: 0;
+  padding: 0;
+  opacity: 0;
+  overflow: hidden;
 }
 </style> 

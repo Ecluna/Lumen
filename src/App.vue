@@ -16,6 +16,12 @@
             <path fill="currentColor" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
           </svg>
         </button>
+        <!-- 保存文件按钮 -->
+        <button class="toolbar-btn" @click="saveFile" title="保存文件">
+          <svg viewBox="0 0 16 16" width="16" height="16">
+            <path fill="currentColor" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/>
+          </svg>
+        </button>
         <!-- 最近打开按钮 -->
         <button class="toolbar-btn" @click="toggleFileManager" title="最近打开">
           <svg viewBox="0 0 16 16" width="16" height="16">
@@ -42,9 +48,12 @@
 
       <!-- 右侧按钮组 -->
       <div class="toolbar-right">
-        <button class="toolbar-btn" @click="saveFile" title="保存文件">
+        <button class="toolbar-btn" 
+          @click="togglePreview" 
+          :class="{ 'active': showPreview }"
+          title="预览">
           <svg viewBox="0 0 16 16" width="16" height="16">
-            <path fill="currentColor" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/>
+            <path fill="currentColor" d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2zM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717zM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10z"/>
           </svg>
         </button>
       </div>
@@ -81,8 +90,9 @@ const currentFile = ref(null)
 const hasUnsavedChanges = ref(false)
 const hasExternalChanges = ref(false)
 const currentFileName = ref('')
-const showFileManager = ref(true)
+const showFileManager = ref(false)
 const isInitialContent = ref(true)
+const showPreview = ref(true)
 
 // 处理内容变更
 const handleContentChanged = () => {
@@ -206,13 +216,25 @@ const handleKeydown = async (e) => {
   }
 }
 
+// 切换预览显示
+const togglePreview = () => {
+  showPreview.value = !showPreview.value
+  // 保存用户偏好
+  localStorage.setItem('showPreview', showPreview.value.toString())
+}
+
 // 在组件挂载时添加事件监听
 onMounted(() => {
+  // 只在用户手动设置过的情况下才使用保存的偏好
   const savedPreference = localStorage.getItem('showFileManager')
   if (savedPreference !== null) {
     showFileManager.value = savedPreference === 'true'
   }
   window.addEventListener('keydown', handleKeydown)
+  const savedPreviewPreference = localStorage.getItem('showPreview')
+  if (savedPreviewPreference !== null) {
+    showPreview.value = savedPreviewPreference === 'true'
+  }
 })
 
 // 在组件卸载时移除事件监听
@@ -477,5 +499,22 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.toolbar-btn.active {
+  background: #e1e4e8;
+  color: #24292e;
+}
+
+/* 添加预览区域的过渡效果 */
+.preview-wrapper {
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.preview-hidden {
+  width: 0;
+  padding: 0;
+  opacity: 0;
+  overflow: hidden;
 }
 </style>
