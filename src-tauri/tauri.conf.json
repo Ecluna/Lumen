@@ -41,7 +41,7 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "",
+      "copyright": "Copyright © 2024 Ecluna",
       "deb": {
         "depends": []
       },
@@ -54,7 +54,8 @@
         "icons/icon.ico"
       ],
       "identifier": "com.ecluna.lumen",
-      "longDescription": "",
+      "shortDescription": "一个优雅的 Markdown 编辑器",
+      "longDescription": "一个基于 Tauri 和 Vue 3 开发的轻量级 Markdown 编辑器，支持实时预览、主题切换等功能。",
       "macOS": {
         "frameworks": [],
         "minimumSystemVersion": "10.13",
@@ -65,22 +66,14 @@
         "license": "../LICENSE"
       },
       "resources": [],
-      "shortDescription": "",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
         "timestampUrl": "",
         "wix": {
-          "language": "zh-CN",
-          "template": "WXS",
-          "fragmentPaths": [],
-          "componentGroups": [],
-          "properties": {
-            "UpgradeCode": "5B4C1F90-B453-4D76-8F70-9E1E2DBD3962",
-            "ProductName": "Lumen",
-            "Manufacturer": "Ecluna"
-          }
+          "language": ["zh-CN"],
+          "license": "../LICENSE"
         }
       }
     },
