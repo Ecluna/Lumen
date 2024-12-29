@@ -118,89 +118,18 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-.file-manager {
-  width: 250px;
-  min-width: 250px;
-  border-right: 1px solid #e1e4e8;
-  background-color: #f6f8fa;
-  height: 100%;
-  overflow-y: auto;
-  transition: all 0.3s ease;
+<style>
+.file-list {
+  background-color: var(--file-manager-bg);
+  color: var(--text-primary);
 }
 
-.recent-files {
-  padding: 16px;
+.file-item:hover {
+  background-color: var(--hover-bg);
 }
 
-.recent-files h3 {
-  font-size: 14px;
-  color: #24292e;
-  margin-bottom: 8px;
-}
-
-.recent-files ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.recent-files li {
-  padding: 8px;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-bottom: 4px;
-}
-
-.recent-files li:hover {
-  background-color: #e1e4e8;
-}
-
-.recent-files li.active {
-  background-color: #0366d6;
-  color: white;
-}
-
-.file-name {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 2px;
-}
-
-.file-path {
-  display: block;
-  font-size: 12px;
-  color: #666;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-li.active .file-path {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.change-indicator {
-  margin-left: 8px;
-  color: #f44336;
-}
-
-.has-changes {
-  background-color: #fff3e0;
-}
-
-.has-changes.active {
-  background-color: #ffb74d;
-}
-
-.file-time {
-  display: block;
-  font-size: 12px;
-  color: #999;
-  margin-top: 4px;
-}
-
-li.active .file-time {
-  color: rgba(255, 255, 255, 0.7);
+.file-item.active {
+  background-color: var(--accent-color);
+  color: #ffffff;
 }
 </style> 

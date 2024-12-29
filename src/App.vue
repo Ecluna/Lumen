@@ -560,6 +560,18 @@ body {
   --text-primary: #24292e;
   --text-secondary: #57606a;
   --accent-color: #0366d6;
+  --hover-bg: #e1e4e8;
+  --code-bg: #f6f8fa;
+  --blockquote-bg: #f6f8fa;
+  --blockquote-border: #dfe2e5;
+  --scrollbar-thumb: #ccc;
+  --scrollbar-thumb-hover: #999;
+  --file-manager-bg: #fafafa;
+  --status-bar-bg: #f8f9fa;
+  --welcome-bg: rgba(3, 102, 214, 0.1);
+  --welcome-border: #0366d6;
+  --unsaved-dot: #f9826c;
+  --saved-dot: #28a745;
 }
 
 :root.dark-theme {
@@ -569,27 +581,82 @@ body {
   --text-primary: #c9d1d9;
   --text-secondary: #8b949e;
   --accent-color: #58a6ff;
+  --hover-bg: #21262d;
+  --code-bg: #1f2428;
+  --blockquote-bg: #1f2428;
+  --blockquote-border: #30363d;
+  --scrollbar-thumb: #30363d;
+  --scrollbar-thumb-hover: #424a53;
+  --file-manager-bg: #161b22;
+  --status-bar-bg: #161b22;
+  --welcome-bg: rgba(88, 166, 255, 0.1);
+  --welcome-border: #58a6ff;
+  --unsaved-dot: #f85149;
+  --saved-dot: #238636;
 }
 
-/* 应用主题变量 */
+/* 应用主题变量到所有相关元素 */
 .app-container {
   background-color: var(--bg-primary);
   color: var(--text-primary);
 }
 
-.toolbar {
-  background: var(--bg-secondary);
-  border-color: var(--border-color);
-}
-
-.toolbar-btn {
-  color: var(--text-secondary);
-}
-
-.toolbar-btn:hover {
-  background: var(--border-color);
+.markdown-input {
+  background-color: var(--bg-primary);
   color: var(--text-primary);
 }
 
-/* ... 其他样式应用主题变量 ... */
+.markdown-body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.markdown-body pre {
+  background-color: var(--code-bg);
+}
+
+.markdown-body code {
+  background-color: var(--code-bg);
+}
+
+.markdown-body blockquote {
+  background-color: var(--blockquote-bg);
+  border-color: var(--blockquote-border);
+  color: var(--text-secondary);
+}
+
+.file-manager {
+  background-color: var(--file-manager-bg);
+  border-color: var(--border-color);
+}
+
+.status-bar {
+  background-color: var(--status-bar-bg);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.status-dot.unsaved {
+  background-color: var(--unsaved-dot);
+}
+
+.status-dot {
+  background-color: var(--saved-dot);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+/* 欢迎状态样式 */
+.file-status.welcome-status {
+  color: var(--accent-color);
+  background: var(--welcome-bg);
+  border-color: var(--welcome-border);
+}
 </style>

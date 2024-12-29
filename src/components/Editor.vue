@@ -721,4 +721,21 @@ defineExpose({
 }
 
 /* 移除之前的预览隐藏相关样式 */
+
+.editor-wrapper {
+  background-color: var(--bg-primary);
+}
+
+.preview-wrapper {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+.resize-handle:hover {
+  background-color: var(--hover-bg);
+}
+
+.resize-handle:active {
+  background-color: var(--accent-color);
+}
 </style> 
