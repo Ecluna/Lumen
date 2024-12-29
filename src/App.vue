@@ -54,10 +54,13 @@ const hasUnsavedChanges = ref(false)
 const hasExternalChanges = ref(false)
 const currentFileName = ref('')
 const showFileManager = ref(true)
+const isInitialContent = ref(true)
 
 // 处理内容变更
 const handleContentChanged = () => {
-  hasUnsavedChanges.value = true
+  if (!isInitialContent.value) {
+    hasUnsavedChanges.value = true
+  }
 }
 
 // 更新当前文件名
@@ -71,20 +74,29 @@ const updateCurrentFileName = async () => {
 
 // 处理文件选择
 const handleFileSelected = async ({ path, content }) => {
-  if (hasUnsavedChanges.value) {
-    const confirmed = await dialog.ask('有未保存的更改，是否继续？', {
-      title: '确认',
-      type: 'warning'
-    })
-    if (!confirmed) return
+  if (isInitialContent.value || !hasUnsavedChanges.value) {
+    await openSelectedFile(path, content)
+    return
   }
 
+  const confirmed = await dialog.ask('有未保存的更改，是否继续？', {
+    title: '确认',
+    type: 'warning'
+  })
+  if (confirmed) {
+    await openSelectedFile(path, content)
+  }
+}
+
+// 抽取打开文件的共用方法
+const openSelectedFile = async (path, content) => {
   currentFile.value = path
   editorRef.value?.setContent(content)
   await invoke('add_recent_file', { path })
   await fileManagerRef.value?.refreshFiles()
   hasUnsavedChanges.value = false
   hasExternalChanges.value = false
+  isInitialContent.value = false
   await updateCurrentFileName()
 }
 
