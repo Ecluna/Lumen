@@ -273,7 +273,8 @@ const handleScroll = () => {
 
 defineExpose({
   setContent,
-  getContent
+  getContent,
+  toggleOutline
 })
 </script>
 
@@ -400,7 +401,7 @@ defineExpose({
   border: none;
   resize: none;
   outline: none;
-  font-family: v-bind(currentFont);
+  font-family: 'Fira Code', monospace;
   font-size: 14px;
   line-height: 1.6;
   background: transparent;

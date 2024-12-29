@@ -16,17 +16,6 @@
           <path fill="currentColor" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/>
         </svg>
       </button>
-      <select 
-        class="font-select tooltip" 
-        :value="currentFont"
-        @change="changeFont($event.target.value)"
-        title="选择字体">
-        <option v-for="font in fontFamilies" 
-          :key="font.value" 
-          :value="font.value">
-          {{ font.label }}
-        </option>
-      </select>
       <span class="file-status" v-if="currentFile">
         <span class="status-dot" :class="{ 'unsaved': hasUnsavedChanges }"></span>
         {{ currentFileName }}
@@ -65,23 +54,6 @@ const hasUnsavedChanges = ref(false)
 const hasExternalChanges = ref(false)
 const currentFileName = ref('')
 const showFileManager = ref(true)
-
-// 添加字体选项
-const fontFamilies = [
-  { label: 'Fira Code', value: '"Fira Code", monospace' },
-  { label: 'JetBrains Mono', value: '"JetBrains Mono", monospace' },
-  { label: '等距更纱黑体', value: '"Sarasa Mono SC", monospace' },
-  { label: '等宽微软雅黑', value: '"Microsoft YaHei Mono", monospace' },
-  { label: '默认等宽字体', value: 'monospace' }
-]
-
-const currentFont = ref(fontFamilies[0].value)
-
-// 切换字体
-const changeFont = (font) => {
-  currentFont.value = font
-  editorRef.value?.updateFont(font)
-}
 
 // 处理内容变更
 const handleContentChanged = () => {
@@ -361,28 +333,5 @@ body {
   background-color: #0366d6;
   color: white;
   border-color: #0366d6;
-}
-
-/* 字体选择下拉框样式 */
-.font-select {
-  height: 32px;
-  margin-left: 8px;
-  padding: 0 8px;
-  border: 1px solid #e1e4e8;
-  border-radius: 4px;
-  background: #fff;
-  color: #57606a;
-  font-size: 12px;
-  cursor: pointer;
-  outline: none;
-}
-
-.font-select:hover {
-  border-color: #0366d6;
-}
-
-.font-select:focus {
-  border-color: #0366d6;
-  box-shadow: 0 0 0 2px rgba(3, 102, 214, 0.2);
 }
 </style>
