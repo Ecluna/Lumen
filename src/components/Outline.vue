@@ -122,6 +122,8 @@ watch(() => props.currentLine, (newLine) => {
   flex-direction: column;
   background: #fafafa;
   user-select: none;
+  position: relative;
+  z-index: 2;
 }
 
 .outline-header {
@@ -130,6 +132,10 @@ watch(() => props.currentLine, (newLine) => {
   font-weight: 600;
   color: #24292e;
   border-bottom: 1px solid #e1e4e8;
+  background: #fafafa;
+  position: sticky;
+  top: 0;
+  z-index: 3;
 }
 
 .outline-content {

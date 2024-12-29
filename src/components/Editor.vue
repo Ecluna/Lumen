@@ -3,7 +3,7 @@
     <!-- 编辑区域 -->
     <div class="content-area">
       <!-- 工具栏 -->
-      <div class="toolbar">
+      <div class="toolbar" :class="{ 'outline-open': showOutline }">
         <!-- 大纲按钮 -->
         <button class="toolbar-btn" @click="toggleOutline" title="大纲视图">
           <svg viewBox="0 0 16 16" width="16" height="16">
@@ -281,7 +281,13 @@ defineExpose({
   align-items: center;
   padding: 0 12px;
   background: #f8f9fa;
-  gap: 8px;
+  transition: padding-left 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.toolbar.outline-open {
+  padding-left: 252px; /* 240px(大纲宽度) + 12px(原padding) */
 }
 
 .toolbar-btn {
@@ -335,16 +341,20 @@ defineExpose({
 }
 
 .outline-sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 240px;
-  height: 100%;
-  flex-shrink: 0;
+  background: #fafafa;
   border-right: 1px solid #e1e4e8;
-  transition: width 0.3s ease;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  z-index: 2;
 }
 
 .outline-hidden {
-  width: 0;
-  overflow: hidden;
+  transform: translateX(-100%);
 }
 
 .editor-content {
