@@ -31,10 +31,7 @@
             placeholder="请输入 Markdown 内容..."
           ></textarea>
         </div>
-        <div 
-          class="preview-wrapper markdown-body" 
-          v-html="htmlContent"
-        ></div>
+        <div class="preview-wrapper markdown-body" v-html="htmlContent"></div>
       </div>
     </div>
   </div>
@@ -175,8 +172,7 @@ defineExpose({
   display: flex;
   flex-direction: column;
   min-width: 0;
-  height: 100%;
-  transition: margin-left 0.3s ease;
+  height: 100vh;
 }
 
 /* 工具栏样式 */
@@ -187,6 +183,7 @@ defineExpose({
   align-items: center;
   padding: 0 8px;
   background: #f8f9fa;
+  flex-shrink: 0; /* 防止工具栏被压缩 */
 }
 
 .toolbar-btn {
@@ -215,11 +212,16 @@ defineExpose({
 }
 
 /* 调整编辑器和预览区域样式 */
-.editor-wrapper,
+.editor-wrapper {
+  flex: 1;
+  padding: 20px;
+}
+
 .preview-wrapper {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
+  border-left: 1px solid #e1e4e8;
 }
 
 /* 编辑器输入区域样式 */
@@ -233,9 +235,10 @@ defineExpose({
   font-size: 14px;
   line-height: 1.6;
   background: transparent;
-  overflow: hidden; /* 隐藏输入框的滚动条 */
+  overflow-y: auto; /* 只在输入框添加垂直滚动 */
 }
 
+/* 预览区域样式 */
 .preview-wrapper {
   border-left: 1px solid #e1e4e8;
 }
