@@ -74,7 +74,7 @@
 import { ref, watch, defineExpose, onMounted, defineEmits } from 'vue'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
-import { invoke } from '@tauri-apps/api'
+import { invoke, event, fs } from '@tauri-apps/api'
 import Simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
 import Outline from './Outline.vue'
@@ -153,13 +153,8 @@ const handleInput = async () => {
 }
 
 // 处理文件拖放
-const handleDrop = async (e) => {
-  const file = e.dataTransfer.files[0]
-  if (file && file.name.match(/\.(md|markdown)$/i)) {
-    const text = await file.text()
-    markdownContent.value = text
-    handleInput()
-  }
+const handleDrop = (e) => {
+  e.preventDefault()
 }
 
 // 暴露方法给父组件
@@ -173,6 +168,22 @@ const getContent = () => markdownContent.value
 // 初始化时渲染内容
 onMounted(() => {
   handleInput()
+  
+  // 监听 Tauri 的文件拖放事件
+  event.listen('tauri://file-drop', async (e) => {
+    const filePath = e.payload[0]
+    if (filePath.match(/\.(md|markdown)$/i)) {
+      try {
+        const content = await fs.readTextFile(filePath)
+        markdownContent.value = content
+        handleInput()
+        // 添加到最近文件列表
+        await invoke('add_recent_file', { path: filePath })
+      } catch (err) {
+        console.error('Failed to read dropped file:', err)
+      }
+    }
+  })
 })
 
 // 拖动相关状态
