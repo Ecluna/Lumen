@@ -56,11 +56,13 @@
       "identifier": "com.ecluna.lumen",
       "longDescription": "",
       "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
         "frameworks": [],
+        "minimumSystemVersion": "10.13",
+        "exceptionDomain": "",
+        "signingIdentity": null,
+        "entitlements": null,
         "providerShortName": null,
-        "signingIdentity": null
+        "license": "../LICENSE"
       },
       "resources": [],
       "shortDescription": "",

@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "build:windows": "npm run build && npm run tauri build -- --target x86_64-pc-windows-msvc"
+    "build:windows": "npm run build && npm run tauri build -- --target x86_64-pc-windows-msvc",
+    "build:macos": "npm run build && npm run tauri build -- --target universal-apple-darwin"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.2",
