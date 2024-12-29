@@ -400,13 +400,14 @@ defineExpose({
   border: none;
   resize: none;
   outline: none;
-  font-family: 'Fira Code', monospace;
+  font-family: v-bind(currentFont);
   font-size: 14px;
   line-height: 1.6;
   background: transparent;
   padding: 20px;
   padding-bottom: 80px;
-  overflow-y: auto; /* 只在 textarea 上保留滚动 */
+  overflow-y: auto;
+  color: #24292e;
 }
 
 /* 自定义滚动条样式 - 应用到 textarea */
