@@ -41,7 +41,7 @@
           <button class="status-btn" 
             :class="{ 'active': showOutline }"
             @click="toggleOutline" 
-            title="切换大纲">
+            title="切换侧边栏">
             <div class="icon-wrapper">
               <svg class="icon-menu" viewBox="0 0 16 16" width="16" height="16">
                 <path fill="currentColor" d="M2 2.5A.5.5 0 0 1 2.5 2h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z"/>

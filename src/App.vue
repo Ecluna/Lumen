@@ -232,6 +232,15 @@ body {
 
 /* Tooltip 样式 */
 .toolbar-btn[title]::after {
+  display: none; /* 禁用重复的 tooltip */
+}
+
+/* 添加新的 tooltip 样式 */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::after {
   content: attr(title);
   position: absolute;
   bottom: -24px;
@@ -246,9 +255,10 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease;
+  z-index: 1000;
 }
 
-.toolbar-btn[title]:hover::after {
+.tooltip:hover::after {
   opacity: 1;
   visibility: visible;
 }
