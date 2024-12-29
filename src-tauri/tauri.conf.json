@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "lumen",
+    "productName": "Lumen",
     "version": "0.1.0"
   },
   "tauri": {
