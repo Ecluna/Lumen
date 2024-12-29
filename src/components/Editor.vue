@@ -47,14 +47,19 @@
             :class="{ 'active': showOutline }"
             @click="toggleOutline" 
             title="切换侧边栏">
-            <div class="icon-wrapper">
-              <svg class="icon-menu" viewBox="0 0 16 16" width="16" height="16">
-                <path fill="currentColor" d="M2 2.5A.5.5 0 0 1 2.5 2h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z"/>
-              </svg>
-              <svg class="icon-close" viewBox="0 0 16 16" width="16" height="16">
-                <path fill="currentColor" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-              </svg>
-            </div>
+            <svg viewBox="0 0 16 16" width="16" height="16">
+              <g fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- 圆圈 -->
+                <circle cx="8" cy="8" r="6" />
+                <!-- 中心点 - 使用 v-show 控制显示/隐藏 -->
+                <circle v-show="showOutline" 
+                  cx="8" 
+                  cy="8" 
+                  r="2" 
+                  fill="currentColor" 
+                  stroke="none" />
+              </g>
+            </svg>
           </button>
         </div>
         <div class="status-right">
