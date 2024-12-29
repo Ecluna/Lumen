@@ -11,7 +11,7 @@
 
         <!-- 编辑器和预览区域 -->
         <div class="editor-content">
-          <div class="editor-wrapper" :style="{ flex: editorFlex }">
+          <div class="editor-wrapper" :style="{ flex: showPreview ? editorFlex : 1 }">
             <textarea
               v-model="markdownContent"
               class="markdown-input"
@@ -28,11 +28,12 @@
             ></textarea>
           </div>
           <div class="resize-handle" 
+            v-if="showPreview"
             @mousedown="startResize"
             @dblclick="resetSize">
           </div>
-          <div class="preview-wrapper" 
-            :class="{ 'preview-hidden': !showPreview }" 
+          <div v-if="showPreview" 
+            class="preview-wrapper" 
             :style="{ flex: previewFlex }">
             <div class="markdown-body" v-html="htmlContent"></div>
           </div>
@@ -699,4 +700,25 @@ defineExpose({
   opacity: 0;
   overflow: hidden;
 }
+
+/* 修改编辑器区域样式 */
+.editor-wrapper {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  user-select: text;
+  transition: flex 0.3s ease;
+}
+
+/* 修改预览区域样式 */
+.preview-wrapper {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  user-select: text;
+  border-left: 1px solid #e1e4e8;
+  transition: flex 0.3s ease;
+}
+
+/* 移除之前的预览隐藏相关样式 */
 </style> 
