@@ -47,13 +47,13 @@
 
 ```bash
 # 安装依赖
-pnpm install
+npm install
 
 # 启动开发服务器
-pnpm tauri dev
+npm run tauri dev
 
 # 构建应用
-pnpm tauri build
+npm run tauri build
 ```
 
 ## 📄 开源协议
