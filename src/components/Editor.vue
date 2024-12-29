@@ -3,7 +3,7 @@
     <!-- 编辑区域 -->
     <div class="content-area">
       <!-- 工具栏 -->
-      <div class="toolbar" :class="{ 'outline-open': showOutline }">
+      <div class="toolbar">
         <!-- 大纲按钮 -->
         <button class="toolbar-btn" @click="toggleOutline" title="大纲视图">
           <svg viewBox="0 0 16 16" width="16" height="16">
@@ -13,7 +13,7 @@
       </div>
 
       <!-- 编辑器主体 -->
-      <div class="editor-main">
+      <div class="editor-main" :class="{ 'outline-open': showOutline }">
         <!-- 大纲侧边栏 -->
         <div class="outline-sidebar" :class="{ 'outline-hidden': !showOutline }">
           <Outline :content="markdownContent" :current-line="currentLine" />
@@ -338,17 +338,22 @@ defineExpose({
   display: flex;
   height: 100%;
   min-height: 0;
+  position: relative;
+  transition: margin-left 0.3s ease;
+}
+
+.editor-main.outline-open {
+  margin-left: 240px;
 }
 
 .outline-sidebar {
   position: absolute;
-  left: 0;
+  left: -240px;
   top: 0;
   bottom: 0;
   width: 240px;
   background: #fafafa;
   border-right: 1px solid #e1e4e8;
-  transform: translateX(0);
   transition: transform 0.3s ease;
   z-index: 2;
 }
