@@ -175,6 +175,7 @@ defineExpose({
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100%;
   transition: margin-left 0.3s ease;
 }
 
@@ -209,7 +210,8 @@ defineExpose({
 .editor-main {
   flex: 1;
   display: flex;
-  overflow: hidden;
+  min-height: 0;
+  overflow: hidden; /* 隐藏中间的滚动条 */
 }
 
 /* 调整编辑器和预览区域样式 */
@@ -220,15 +222,7 @@ defineExpose({
   padding: 20px;
 }
 
-/* 隐藏侧边栏时的样式 */
-.sidebar-hidden .sidebar {
-  width: 0;
-  padding: 0;
-  border: none;
-  overflow: hidden;
-}
-
-/* 调整原有样式 */
+/* 编辑器输入区域样式 */
 .markdown-input {
   width: 100%;
   height: 100%;
@@ -239,6 +233,7 @@ defineExpose({
   font-size: 14px;
   line-height: 1.6;
   background: transparent;
+  overflow: hidden; /* 隐藏输入框的滚动条 */
 }
 
 .preview-wrapper {
@@ -303,5 +298,13 @@ defineExpose({
 
 .markdown-body table tr:nth-child(2n) {
   background-color: #f6f8fa;
+}
+
+/* 隐藏侧边栏时的样式 */
+.sidebar-hidden .sidebar {
+  width: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
 }
 </style> 
