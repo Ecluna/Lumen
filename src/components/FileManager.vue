@@ -119,17 +119,90 @@ onUnmounted(() => {
 </script>
 
 <style>
-.file-list {
+.file-manager {
+  width: 250px;
+  min-width: 250px;
+  border-right: 1px solid var(--border-color);
   background-color: var(--file-manager-bg);
-  color: var(--text-primary);
+  height: 100%;
+  overflow-y: auto;
+  transition: all 0.3s ease;
 }
 
-.file-item:hover {
+.recent-files {
+  padding: 16px;
+}
+
+.recent-files h3 {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.recent-files ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-files li {
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+  transition: background-color 0.2s ease;
+}
+
+.recent-files li:hover {
   background-color: var(--hover-bg);
 }
 
-.file-item.active {
+.recent-files li.active {
   background-color: var(--accent-color);
   color: #ffffff;
+}
+
+.file-name {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.file-path {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+li.active .file-path {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.change-indicator {
+  margin-left: 8px;
+  color: var(--unsaved-dot);
+}
+
+.has-changes {
+  background-color: var(--welcome-bg);
+}
+
+.has-changes.active {
+  background-color: var(--accent-color);
+}
+
+.file-time {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+li.active .file-time {
+  color: rgba(255, 255, 255, 0.7);
 }
 </style> 
