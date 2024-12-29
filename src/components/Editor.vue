@@ -28,7 +28,11 @@
               @input="handleInput"
               @drop.prevent="handleDrop"
               @dragover.prevent
+              @click="handleCursorMove"
+              @keyup="handleCursorMove"
+              @scroll="handleScroll"
               placeholder="请输入 Markdown 内容..."
+              ref="editorRef"
             ></textarea>
           </div>
           <div class="resize-handle" 
@@ -203,14 +207,37 @@ const resetSize = () => {
   previewFlex.value = 1
 }
 
-// 当前光标所在行
+const editorRef = ref(null)
 const currentLine = ref(0)
 
 // 处理光标位置变化
 const handleCursorMove = (e) => {
   const textarea = e.target
   const content = textarea.value.substring(0, textarea.selectionStart)
-  currentLine.value = content.split('\n').length - 1
+  const newLine = content.split('\n').length - 1
+  if (currentLine.value !== newLine) {
+    currentLine.value = newLine
+  }
+}
+
+// 处理滚动事件
+const handleScroll = () => {
+  if (!editorRef.value) return
+  
+  const textarea = editorRef.value
+  const lineHeight = parseInt(getComputedStyle(textarea).lineHeight)
+  const scrollTop = textarea.scrollTop
+  const visibleLines = Math.floor(scrollTop / lineHeight)
+  
+  // 获取可见区域中间位置的行号
+  const middleOffset = Math.floor(textarea.clientHeight / lineHeight / 2)
+  const targetLine = visibleLines + middleOffset
+  
+  // 更新当前行
+  const lines = textarea.value.split('\n')
+  if (targetLine < lines.length) {
+    currentLine.value = targetLine
+  }
 }
 
 defineExpose({

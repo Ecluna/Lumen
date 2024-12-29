@@ -77,8 +77,42 @@ const scrollToHeading = (item) => {
   // 计算滚动位置
   const lineHeight = parseInt(getComputedStyle(editor).lineHeight)
   const lineNumber = editor.value.substr(0, item.position).split('\n').length
-  editor.scrollTop = lineNumber * lineHeight - editor.clientHeight / 2
+  const scrollTop = lineNumber * lineHeight - editor.clientHeight / 2
+  
+  // 使用平滑滚动
+  editor.scrollTo({
+    top: scrollTop,
+    behavior: 'smooth'
+  })
+  
+  // 立即更新当前行
+  currentLine.value = item.startLine
 }
+
+// 计算当前活动标题
+const getActiveHeading = (line) => {
+  if (!outlineItems.value.length) return null
+  
+  for (let i = outlineItems.value.length - 1; i >= 0; i--) {
+    if (outlineItems.value[i].startLine <= line) {
+      return outlineItems.value[i]
+    }
+  }
+  
+  return outlineItems.value[0]
+}
+
+// 监听当前行变化
+watch(() => props.currentLine, (newLine) => {
+  const activeHeading = getActiveHeading(newLine)
+  if (activeHeading) {
+    // 确保活动标题在视图中可见
+    const activeElement = document.querySelector('.outline-item.active')
+    if (activeElement) {
+      activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }
+})
 </script>
 
 <style>
@@ -113,6 +147,7 @@ const scrollToHeading = (item) => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
 }
 
 .outline-item:hover {
@@ -123,6 +158,17 @@ const scrollToHeading = (item) => {
 .outline-item.active {
   font-weight: 600;
   color: #0366d6;
+}
+
+.outline-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #0366d6;
+  transition: opacity 0.2s;
 }
 
 .heading-text {
