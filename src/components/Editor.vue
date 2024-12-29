@@ -319,4 +319,48 @@ defineExpose({
 .markdown-body > *:last-child {
   margin-bottom: 40px; /* 确保最后一个元素有足够的底部间距 */
 }
+
+/* 美化滚动条样式 */
+.editor-wrapper::-webkit-scrollbar,
+.preview-wrapper::-webkit-scrollbar,
+.markdown-input::-webkit-scrollbar {
+  width: 6px; /* 更窄的滚动条 */
+  height: 6px;
+}
+
+.editor-wrapper::-webkit-scrollbar-track,
+.preview-wrapper::-webkit-scrollbar-track,
+.markdown-input::-webkit-scrollbar-track {
+  background: transparent; /* 透明轨道 */
+}
+
+.editor-wrapper::-webkit-scrollbar-thumb,
+.preview-wrapper::-webkit-scrollbar-thumb,
+.markdown-input::-webkit-scrollbar-thumb {
+  background: #ccc; /* 浅灰色滑块 */
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+/* 悬浮时的滚动条样式 */
+.editor-wrapper::-webkit-scrollbar-thumb:hover,
+.preview-wrapper::-webkit-scrollbar-thumb:hover,
+.markdown-input::-webkit-scrollbar-thumb:hover {
+  background: #999; /* 深一点的灰色 */
+}
+
+/* 确保滚动条只在需要时显示 */
+.editor-wrapper,
+.preview-wrapper,
+.markdown-input {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ccc transparent; /* Firefox */
+}
+
+/* 当内容滚动时才显示滚动条 */
+.editor-wrapper:not(:hover)::-webkit-scrollbar-thumb,
+.preview-wrapper:not(:hover)::-webkit-scrollbar-thumb,
+.markdown-input:not(:hover)::-webkit-scrollbar-thumb {
+  background: transparent;
+}
 </style> 
