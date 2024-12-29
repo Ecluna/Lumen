@@ -215,19 +215,21 @@ defineExpose({
 .editor-wrapper {
   flex: 1;
   padding: 20px;
+  padding-bottom: 80px; /* 增加更多底部内边距 */
 }
 
 .preview-wrapper {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
+  padding-bottom: 80px; /* 增加更多底部内边距 */
   border-left: 1px solid #e1e4e8;
 }
 
 /* 编辑器输入区域样式 */
 .markdown-input {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   border: none;
   resize: none;
   outline: none;
@@ -235,7 +237,8 @@ defineExpose({
   font-size: 14px;
   line-height: 1.6;
   background: transparent;
-  overflow-y: auto; /* 只在输入框添加垂直滚动 */
+  overflow-y: auto;
+  padding-bottom: 40px; /* 为输入框内容添加底部间距 */
 }
 
 /* 预览区域样式 */
@@ -250,6 +253,7 @@ defineExpose({
   line-height: 1.6;
   word-wrap: break-word;
   color: #24292e;
+  padding-bottom: 40px; /* 增加预览内容的底部间距 */
 }
 
 .markdown-body pre {
@@ -309,5 +313,10 @@ defineExpose({
   padding: 0;
   border: none;
   overflow: hidden;
+}
+
+/* 最后一个元素的额外间距 */
+.markdown-body > *:last-child {
+  margin-bottom: 40px; /* 确保最后一个元素有足够的底部间距 */
 }
 </style> 
