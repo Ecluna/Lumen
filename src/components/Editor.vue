@@ -20,9 +20,11 @@
               @dragover.prevent
               @click="handleCursorMove"
               @keyup="handleCursorMove"
+              @keydown="handleEditorKeydown"
               @scroll="handleScroll"
               placeholder="请输入 Markdown 内容..."
               ref="editorRef"
+              :style="{ fontSize: `${fontSize}px` }"
             ></textarea>
           </div>
           <div class="resize-handle" 
@@ -271,6 +273,38 @@ const handleScroll = () => {
   }
 }
 
+// 添加字体大小状态
+const fontSize = ref(14)
+const MIN_FONT_SIZE = 12
+const MAX_FONT_SIZE = 24
+
+// 调整字体大小
+const adjustFontSize = (delta) => {
+  const newSize = fontSize.value + delta
+  if (newSize >= MIN_FONT_SIZE && newSize <= MAX_FONT_SIZE) {
+    fontSize.value = newSize
+  }
+}
+
+// 添加快捷键处理
+const handleEditorKeydown = (e) => {
+  // Ctrl/Cmd + 加号/等号 放大字体
+  if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+')) {
+    e.preventDefault()
+    adjustFontSize(1)
+  }
+  // Ctrl/Cmd + 减号 缩小字体
+  if ((e.ctrlKey || e.metaKey) && e.key === '-') {
+    e.preventDefault()
+    adjustFontSize(-1)
+  }
+  // Ctrl/Cmd + 0 重置字体大小
+  if ((e.ctrlKey || e.metaKey) && e.key === '0') {
+    e.preventDefault()
+    fontSize.value = 14
+  }
+}
+
 defineExpose({
   setContent,
   getContent,
@@ -405,13 +439,13 @@ defineExpose({
   resize: none;
   outline: none;
   font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
-  font-size: 14px;
   line-height: 1.6;
   background: transparent;
   padding: 20px;
   padding-bottom: 80px;
   overflow-y: auto;
   color: #24292e;
+  transition: font-size 0.2s ease;
 }
 
 /* 自定义滚动条样式 - 应用到 textarea */
