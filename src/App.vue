@@ -359,8 +359,8 @@ body {
   display: flex;
   align-items: center;
   padding: 8px;
-  background: #f6f8fa;
-  border-bottom: 1px solid #e1e4e8;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
   height: 40px;
 }
 
@@ -371,18 +371,24 @@ body {
   background: none;
   border: none;
   border-radius: 4px;
-  color: #57606a;
+  color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   margin-right: 4px;
+  transition: all 0.2s ease;
 }
 
 .toolbar-btn:hover {
-  background: #e1e4e8;
-  color: #24292e;
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.toolbar-btn.active {
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
 }
 
 /* Tooltip 样式 */
@@ -535,11 +541,6 @@ body {
   align-items: center;
 }
 
-.toolbar-btn.active {
-  background: #e1e4e8;
-  color: #24292e;
-}
-
 /* 添加预览区域的过渡效果 */
 .preview-wrapper {
   transition: width 0.3s ease, opacity 0.3s ease;
@@ -626,13 +627,13 @@ body {
 }
 
 .file-manager {
-  background-color: var(--file-manager-bg);
-  border-color: var(--border-color);
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
 }
 
 .status-bar {
-  background-color: var(--status-bar-bg);
-  border-color: var(--border-color);
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
   color: var(--text-secondary);
 }
 
@@ -658,5 +659,27 @@ body {
   color: var(--accent-color);
   background: var(--welcome-bg);
   border-color: var(--welcome-border);
+}
+
+/* 修改大纲侧边栏样式 */
+.outline-sidebar {
+  width: 240px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.status-btn {
+  color: var(--text-secondary);
+}
+
+.status-btn:hover {
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.status-btn.active {
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
 }
 </style>
