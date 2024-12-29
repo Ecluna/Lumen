@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { invoke } from '@tauri-apps/api'
 import { dialog, notification } from '@tauri-apps/api'
 import { basename } from '@tauri-apps/api/path'
@@ -147,12 +147,27 @@ const toggleFileManager = () => {
   localStorage.setItem('showFileManager', showFileManager.value.toString())
 }
 
-// 初始化时读取用户偏好
+// 添加快捷键处理
+const handleKeydown = async (e) => {
+  // Ctrl+S 或 Cmd+S
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault() // 阻止浏览器默认保存
+    await saveFile()
+  }
+}
+
+// 在组件挂载时添加事件监听
 onMounted(() => {
   const savedPreference = localStorage.getItem('showFileManager')
   if (savedPreference !== null) {
     showFileManager.value = savedPreference === 'true'
   }
+  window.addEventListener('keydown', handleKeydown)
+})
+
+// 在组件卸载时移除事件监听
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
 })
 </script>
 
