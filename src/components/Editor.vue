@@ -391,7 +391,7 @@ defineExpose({
   bottom: 0;
   width: 240px;
   background: #fafafa;
-  border-right: 1px solid #e1e4e8;
+  border-right: 1px solid var(--border-color);
   transition: transform 0.3s ease;
   z-index: 2;
 }
@@ -417,7 +417,7 @@ defineExpose({
 }
 
 .preview-wrapper {
-  border-left: 1px solid #e1e4e8;
+  border-left: 1px solid var(--border-color);
 }
 
 /* 编辑器输入区域样式 */
@@ -576,18 +576,19 @@ defineExpose({
 /* 拖动条样式 */
 .resize-handle {
   width: 5px;
-  background-color: transparent;
+  background-color: var(--border-color);
   cursor: col-resize;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
 }
 
 .resize-handle:hover {
-  background-color: #e1e4e8;
+  background-color: var(--hover-bg);
 }
 
-/* 拖动时的样式 */
 .resize-handle:active {
-  background-color: #0366d6;
+  background-color: var(--accent-color);
 }
 
 .outline-wrapper {
@@ -716,7 +717,7 @@ defineExpose({
   min-width: 0;
   overflow: hidden;
   user-select: text;
-  border-left: 1px solid #e1e4e8;
+  border-left: 1px solid var(--border-color);
   transition: flex 0.3s ease;
 }
 
