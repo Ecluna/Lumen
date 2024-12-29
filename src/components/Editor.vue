@@ -281,6 +281,9 @@ defineExpose({
 <style>
 @import 'highlight.js/styles/github.css';
 
+/* 引入 JetBrains Mono 字体 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
 .editor-container {
   display: flex;
   flex-direction: column;
@@ -656,11 +659,10 @@ defineExpose({
 /* 修改预览区域代码块字体 */
 .markdown-body pre,
 .markdown-body code {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 }
 
-/* 确保行内代码也使用相同字体 */
 .markdown-body :not(pre) > code {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 }
 </style> 
