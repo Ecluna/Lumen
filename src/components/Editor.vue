@@ -1,19 +1,42 @@
 <template>
-  <div class="editor-container">
-    <div class="editor-wrapper">
-      <textarea
-        v-model="markdownContent"
-        class="markdown-input"
-        @input="handleInput"
-        @drop.prevent="handleDrop"
-        @dragover.prevent
-        placeholder="请输入 Markdown 内容..."
-      ></textarea>
+  <div class="editor-container" :class="{ 'sidebar-hidden': !showSidebar }">
+    <!-- 侧边栏 -->
+    <div class="sidebar" v-show="showSidebar">
+      <div class="outline">
+        <!-- 这里后续会放大纲内容 -->
+      </div>
     </div>
-    <div 
-      class="preview-wrapper markdown-body" 
-      v-html="htmlContent"
-    ></div>
+
+    <!-- 编辑区域 -->
+    <div class="content-area">
+      <!-- 工具栏 -->
+      <div class="toolbar">
+        <button class="toolbar-btn" @click="toggleSidebar">
+          <svg viewBox="0 0 16 16" width="16" height="16">
+            <path fill="currentColor" d="M2 2.5A1.5 1.5 0 013.5 1h9A1.5 1.5 0 0114 2.5v11a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5v-11zM3.5 2a.5.5 0 00-.5.5v11a.5.5 0 00.5.5h9a.5.5 0 00.5-.5v-11a.5.5 0 00-.5-.5h-9z"/>
+            <path fill="currentColor" d="M6 4.5a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 编辑器主体 -->
+      <div class="editor-main">
+        <div class="editor-wrapper">
+          <textarea
+            v-model="markdownContent"
+            class="markdown-input"
+            @input="handleInput"
+            @drop.prevent="handleDrop"
+            @dragover.prevent
+            placeholder="请输入 Markdown 内容..."
+          ></textarea>
+        </div>
+        <div 
+          class="preview-wrapper markdown-body" 
+          v-html="htmlContent"
+        ></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -42,7 +65,7 @@ const md = new MarkdownIt({
 
 const initialContent = `# 欢迎使用 Markdown 编辑器
 
-## 基本功��
+## 基本功能
 
 1. 实时预览
 2. 文件保存/打开
@@ -82,6 +105,14 @@ function hello() {
 
 const markdownContent = ref(initialContent)
 const htmlContent = ref('')
+
+// 侧边栏状态
+const showSidebar = ref(false)
+
+// 切换侧边栏
+const toggleSidebar = () => {
+  showSidebar.value = !showSidebar.value
+}
 
 // 处理输入
 const handleInput = async () => {
@@ -125,19 +156,79 @@ defineExpose({
 
 .editor-container {
   display: flex;
-  height: calc(100vh - 50px);
-  width: 100%;
-  transition: width 0.3s ease;
+  height: 100vh;
+  background: #fff;
 }
 
+/* 侧边栏样式 */
+.sidebar {
+  width: 250px;
+  border-right: 1px solid #e1e4e8;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+  flex-shrink: 0; /* 防止侧边栏被压缩 */
+}
+
+/* 内容区域样式 */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  transition: margin-left 0.3s ease;
+}
+
+/* 工具栏样式 */
+.toolbar {
+  height: 40px;
+  border-bottom: 1px solid #e1e4e8;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  background: #f8f9fa;
+}
+
+.toolbar-btn {
+  padding: 4px;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: #57606a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar-btn:hover {
+  background: #e1e4e8;
+  color: #24292e;
+}
+
+/* 编辑器主体样式 */
+.editor-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* 调整编辑器和预览区域样式 */
 .editor-wrapper,
 .preview-wrapper {
-  width: 50%;
-  padding: 20px;
+  flex: 1;
   overflow-y: auto;
-  transition: width 0.3s ease;
+  padding: 20px;
 }
 
+/* 隐藏侧边栏时的样式 */
+.sidebar-hidden .sidebar {
+  width: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+}
+
+/* 调整原有样式 */
 .markdown-input {
   width: 100%;
   height: 100%;
@@ -147,15 +238,11 @@ defineExpose({
   font-family: 'Fira Code', monospace;
   font-size: 14px;
   line-height: 1.6;
-  padding: 20px;
-  background-color: #fafbfc;
-  color: #24292e;
+  background: transparent;
 }
 
 .preview-wrapper {
   border-left: 1px solid #e1e4e8;
-  background-color: #ffffff;
-  padding: 20px 30px;
 }
 
 /* 预览区域的基础样式 */
