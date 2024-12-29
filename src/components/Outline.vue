@@ -74,10 +74,10 @@ const scrollToHeading = (item) => {
   editor.setSelectionRange(item.position, item.position)
   editor.focus()
   
-  // 计算滚动位置
+  // 计算滚动位置 - 将目标行设置在顶部
   const lineHeight = parseInt(getComputedStyle(editor).lineHeight)
   const lineNumber = editor.value.substr(0, item.position).split('\n').length
-  const scrollTop = lineNumber * lineHeight - editor.clientHeight / 2
+  const scrollTop = (lineNumber - 1) * lineHeight // 减1是为了让标题行显示在顶部
   
   // 使用平滑滚动
   editor.scrollTo({
