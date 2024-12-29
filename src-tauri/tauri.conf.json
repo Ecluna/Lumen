@@ -63,8 +63,7 @@
         "signingIdentity": null,
         "entitlements": null,
         "providerShortName": null,
-        "license": "../LICENSE",
-        "architecture": "arm64"
+        "license": "../LICENSE"
       },
       "resources": [],
       "targets": "all",
