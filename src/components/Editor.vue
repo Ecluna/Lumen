@@ -16,7 +16,7 @@
       <div class="editor-main">
         <!-- 大纲侧边栏 -->
         <div class="outline-sidebar" :class="{ 'outline-hidden': !showOutline }">
-          <Outline :content="markdownContent" />
+          <Outline :content="markdownContent" :current-line="currentLine" />
         </div>
 
         <!-- 编辑器和预览区域 -->
@@ -201,6 +201,16 @@ const stopResize = () => {
 const resetSize = () => {
   editorFlex.value = 1
   previewFlex.value = 1
+}
+
+// 当前光标所在行
+const currentLine = ref(0)
+
+// 处理光标位置变化
+const handleCursorMove = (e) => {
+  const textarea = e.target
+  const content = textarea.value.substring(0, textarea.selectionStart)
+  currentLine.value = content.split('\n').length - 1
 }
 
 defineExpose({

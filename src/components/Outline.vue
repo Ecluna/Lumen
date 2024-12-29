@@ -1,7 +1,7 @@
 <template>
   <div class="outline">
     <div class="outline-header">
-      <span>大纲</span>
+      <span>文件</span>
     </div>
     <div class="outline-content">
       <div v-for="(item, index) in outlineItems" 
@@ -14,10 +14,9 @@
              'level-4': item.level === 4,
              'level-5': item.level === 5,
              'level-6': item.level === 6,
-             'active': currentHeading === item.text
+             'active': currentLine >= item.startLine && currentLine < (outlineItems[index + 1]?.startLine ?? Infinity)
            }"
            @click="scrollToHeading(item)">
-        <span class="heading-marker">{{ '#'.repeat(item.level) }}</span>
         <span class="heading-text">{{ item.text }}</span>
       </div>
     </div>
@@ -31,25 +30,29 @@ const props = defineProps({
   content: {
     type: String,
     required: true
+  },
+  currentLine: {
+    type: Number,
+    default: 0
   }
 })
 
 const outlineItems = ref([])
-const currentHeading = ref('')
 
 // 解析内容生成大纲
 const parseOutline = (content) => {
   const lines = content.split('\n')
   const items = []
   
-  lines.forEach(line => {
-    // 匹配标题行
+  lines.forEach((line, index) => {
+    // 匹配标题行，但不显示 # 符号
     const match = line.match(/^(#{1,6})\s+(.+)$/)
     if (match) {
       items.push({
         level: match[1].length,
         text: match[2],
-        line: line
+        startLine: index,
+        position: content.split('\n').slice(0, index).join('\n').length + (index > 0 ? 1 : 0)
       })
     }
   })
@@ -67,27 +70,14 @@ const scrollToHeading = (item) => {
   const editor = document.querySelector('.markdown-input')
   if (!editor) return
   
-  const lines = editor.value.split('\n')
-  let position = 0
-  
-  // 查找标题位置
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i] === item.line) {
-      break
-    }
-    position += lines[i].length + 1 // +1 for newline
-  }
-  
   // 设置光标位置并滚动
-  editor.setSelectionRange(position, position)
+  editor.setSelectionRange(item.position, item.position)
   editor.focus()
   
   // 计算滚动位置
   const lineHeight = parseInt(getComputedStyle(editor).lineHeight)
-  const lineNumber = editor.value.substr(0, position).split('\n').length
+  const lineNumber = editor.value.substr(0, item.position).split('\n').length
   editor.scrollTop = lineNumber * lineHeight - editor.clientHeight / 2
-  
-  currentHeading.value = item.text
 }
 </script>
 
@@ -96,8 +86,8 @@ const scrollToHeading = (item) => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #f8f9fa;
-  border-left: 1px solid #e1e4e8;
+  background: #fafafa;
+  user-select: none;
 }
 
 .outline-header {
@@ -115,13 +105,14 @@ const scrollToHeading = (item) => {
 }
 
 .outline-item {
-  display: flex;
-  align-items: center;
   padding: 4px 16px;
   cursor: pointer;
   font-size: 13px;
   color: #57606a;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .outline-item:hover {
@@ -130,24 +121,17 @@ const scrollToHeading = (item) => {
 }
 
 .outline-item.active {
-  background: #e8eaed;
+  font-weight: 600;
   color: #0366d6;
 }
 
-.heading-marker {
-  color: #8b949e;
-  margin-right: 8px;
-  font-size: 12px;
-}
-
 .heading-text {
-  flex: 1;
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.level-1 { padding-left: 16px; font-weight: 600; }
+.level-1 { padding-left: 16px; }
 .level-2 { padding-left: 24px; }
 .level-3 { padding-left: 32px; }
 .level-4 { padding-left: 40px; }
