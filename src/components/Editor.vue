@@ -79,7 +79,7 @@ import Simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
 import Outline from './Outline.vue'
 
-const emit = defineEmits(['content-changed'])
+const emit = defineEmits(['content-changed', 'file-opened'])
 
 // 初始化 markdown-it，配置代码高亮
 const md = new MarkdownIt({
@@ -179,6 +179,11 @@ onMounted(() => {
         handleInput()
         // 添加到最近文件列表
         await invoke('add_recent_file', { path: filePath })
+        // 触发文件打开事件
+        emit('file-opened', {
+          path: filePath,
+          content: content
+        })
       } catch (err) {
         console.error('Failed to read dropped file:', err)
       }

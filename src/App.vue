@@ -91,6 +91,7 @@
       />
       <Editor 
         ref="editorRef"
+        @file-opened="handleFileOpened"
         @content-changed="handleContentChanged"
         :class="{ 'editor-full': !showFileManager }"
         :showPreview="showPreview"
@@ -344,6 +345,14 @@ const createNewFile = async () => {
   } catch (err) {
     console.error('创建文件失败:', err)
   }
+}
+
+// 处理文件打开事件
+const handleFileOpened = async ({ path, content }) => {
+  currentFile.value = path
+  isInitialContent.value = false
+  hasUnsavedChanges.value = false
+  await updateCurrentFileName()
 }
 </script>
 
