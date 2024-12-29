@@ -1,17 +1,10 @@
 <template>
-  <div class="editor-container" :class="{ 'sidebar-hidden': !showSidebar }">
-    <!-- 侧边栏 -->
-    <div class="sidebar" v-show="showSidebar">
-      <div class="outline">
-        <!-- 这里后续会放大纲内容 -->
-      </div>
-    </div>
-
+  <div class="editor-container">
     <!-- 编辑区域 -->
     <div class="content-area">
       <!-- 工具栏 -->
       <div class="toolbar">
-        <button class="toolbar-btn" @click="toggleSidebar">
+        <button class="toolbar-btn" @click="toggleOutline" title="大纲">
           <svg viewBox="0 0 16 16" width="16" height="16">
             <path fill="currentColor" d="M2 2.5A1.5 1.5 0 013.5 1h9A1.5 1.5 0 0114 2.5v11a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5v-11zM3.5 2a.5.5 0 00-.5.5v11a.5.5 0 00.5.5h9a.5.5 0 00.5-.5v-11a.5.5 0 00-.5-.5h-9z"/>
             <path fill="currentColor" d="M6 4.5a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z"/>
@@ -21,22 +14,30 @@
 
       <!-- 编辑器主体 -->
       <div class="editor-main">
-        <div class="editor-wrapper" :style="{ flex: editorFlex }">
-          <textarea
-            v-model="markdownContent"
-            class="markdown-input"
-            @input="handleInput"
-            @drop.prevent="handleDrop"
-            @dragover.prevent
-            placeholder="请输入 Markdown 内容..."
-          ></textarea>
+        <!-- 大纲侧边栏 -->
+        <div class="outline-sidebar" :class="{ 'outline-hidden': !showOutline }">
+          <Outline :content="markdownContent" />
         </div>
-        <div class="resize-handle" 
-          @mousedown="startResize"
-          @dblclick="resetSize">
-        </div>
-        <div class="preview-wrapper" :style="{ flex: previewFlex }">
-          <div class="markdown-body" v-html="htmlContent"></div>
+
+        <!-- 编辑器和预览区域 -->
+        <div class="editor-content">
+          <div class="editor-wrapper" :style="{ flex: editorFlex }">
+            <textarea
+              v-model="markdownContent"
+              class="markdown-input"
+              @input="handleInput"
+              @drop.prevent="handleDrop"
+              @dragover.prevent
+              placeholder="请输入 Markdown 内容..."
+            ></textarea>
+          </div>
+          <div class="resize-handle" 
+            @mousedown="startResize"
+            @dblclick="resetSize">
+          </div>
+          <div class="preview-wrapper" :style="{ flex: previewFlex }">
+            <div class="markdown-body" v-html="htmlContent"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -50,6 +51,7 @@ import hljs from 'highlight.js'
 import { invoke } from '@tauri-apps/api'
 import Simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
+import Outline from './Outline.vue'
 
 const emit = defineEmits(['content-changed'])
 
@@ -111,12 +113,12 @@ function hello() {
 const markdownContent = ref(initialContent)
 const htmlContent = ref('')
 
-// 侧边栏状态
-const showSidebar = ref(false)
+// 大纲显示状态
+const showOutline = ref(false)
 
-// 切换侧边栏
-const toggleSidebar = () => {
-  showSidebar.value = !showSidebar.value
+// 切换大纲显示
+const toggleOutline = () => {
+  showOutline.value = !showOutline.value
 }
 
 // 处理输入
@@ -267,6 +269,25 @@ defineExpose({
   display: flex;
   height: 100%;
   min-height: 0;
+}
+
+.outline-sidebar {
+  width: 240px;
+  height: 100%;
+  flex-shrink: 0;
+  border-right: 1px solid #e1e4e8;
+  transition: width 0.3s ease;
+}
+
+.outline-hidden {
+  width: 0;
+  overflow: hidden;
+}
+
+.editor-content {
+  display: flex;
+  flex: 1;
+  min-width: 0;
   user-select: none;
 }
 
@@ -450,5 +471,11 @@ defineExpose({
 /* 拖动时的样式 */
 .resize-handle:active {
   background-color: #0366d6;
+}
+
+.outline-wrapper {
+  width: 240px;
+  height: 100%;
+  flex-shrink: 0;
 }
 </style> 
