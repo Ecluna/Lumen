@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0366d6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#58a6ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 圆形背景 -->
+  <circle cx="512" cy="512" r="460" fill="url(#bgGradient)" />
+  
+  <!-- L 字母主体 -->
+  <path d="M320 280
+           v340
+           q0 20 20 20
+           h280
+           q20 0 20 -20
+           v-60
+           q0 -20 -20 -20
+           h-180
+           v-260
+           q0 -20 -20 -20
+           h-80
+           q-20 0 -20 20z" 
+        fill="white" />
+  
+  <!-- 笔尖装饰 -->
+  <path d="M580 280
+           l100 -60
+           l-20 100
+           l-80 -40z"
+        fill="white" />
+</svg> 
