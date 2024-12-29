@@ -28,6 +28,17 @@
             <path fill="currentColor" d="M1.75 1A1.75 1.75 0 000 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0016 13.25v-8.5A1.75 1.75 0 0014.25 3H7.5a.25.25 0 01-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75z"/>
           </svg>
         </button>
+        <!-- 主题切换按钮 -->
+        <button class="toolbar-btn" 
+          @click="toggleTheme" 
+          :title="isDarkMode ? '切换亮色主题' : '切换暗色主题'">
+          <svg v-if="!isDarkMode" viewBox="0 0 16 16" width="16" height="16">
+            <path fill="currentColor" d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+          </svg>
+          <svg v-else viewBox="0 0 16 16" width="16" height="16">
+            <path fill="currentColor" d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+          </svg>
+        </button>
       </div>
 
       <!-- 中间文件状态 -->
@@ -71,6 +82,7 @@
         ref="editorRef"
         @content-changed="handleContentChanged"
         :class="{ 'editor-full': !showFileManager }"
+        :showPreview="showPreview"
       />
     </div>
   </div>
@@ -93,6 +105,18 @@ const currentFileName = ref('')
 const showFileManager = ref(false)
 const isInitialContent = ref(true)
 const showPreview = ref(true)
+
+// 添加主题状态
+const isDarkMode = ref(false)
+
+// 切换主题
+const toggleTheme = () => {
+  isDarkMode.value = !isDarkMode.value
+  // 保存用户偏好
+  localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
+  // 应用主题
+  document.documentElement.classList.toggle('dark-theme', isDarkMode.value)
+}
 
 // 处理内容变更
 const handleContentChanged = () => {
@@ -234,6 +258,16 @@ onMounted(() => {
   const savedPreviewPreference = localStorage.getItem('showPreview')
   if (savedPreviewPreference !== null) {
     showPreview.value = savedPreviewPreference === 'true'
+  }
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme) {
+    isDarkMode.value = savedTheme === 'dark'
+    document.documentElement.classList.toggle('dark-theme', isDarkMode.value)
+  } else {
+    // 如果没有保存的偏好，跟随系统
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    isDarkMode.value = prefersDark
+    document.documentElement.classList.toggle('dark-theme', prefersDark)
   }
 })
 
@@ -517,4 +551,45 @@ body {
   opacity: 0;
   overflow: hidden;
 }
+
+/* 暗色主题变量 */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --border-color: #e1e4e8;
+  --text-primary: #24292e;
+  --text-secondary: #57606a;
+  --accent-color: #0366d6;
+}
+
+:root.dark-theme {
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --border-color: #30363d;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --accent-color: #58a6ff;
+}
+
+/* 应用主题变量 */
+.app-container {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.toolbar {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.toolbar-btn {
+  color: var(--text-secondary);
+}
+
+.toolbar-btn:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* ... 其他样式应用主题变量 ... */
 </style>
