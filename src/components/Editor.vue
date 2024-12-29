@@ -404,7 +404,7 @@ defineExpose({
   border: none;
   resize: none;
   outline: none;
-  font-family: 'Fira Code', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   font-size: 14px;
   line-height: 1.6;
   background: transparent;
