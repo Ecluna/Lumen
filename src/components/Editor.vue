@@ -5,7 +5,7 @@
       <!-- 工具栏 -->
       <div class="toolbar">
         <!-- 大纲按钮 -->
-        <button class="toolbar-btn" @click="toggleOutline" title="大纲视图">
+        <button class="toolbar-btn outline-btn" :class="{ 'outline-open': showOutline }" @click="toggleOutline" title="大纲视图">
           <svg viewBox="0 0 16 16" width="16" height="16">
             <path fill="currentColor" d="M2 2.5A.5.5 0 0 1 2.5 2h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z"/>
           </svg>
@@ -281,13 +281,28 @@ defineExpose({
   align-items: center;
   padding: 0 12px;
   background: #f8f9fa;
-  transition: padding-left 0.3s ease;
   position: relative;
   z-index: 1;
 }
 
-.toolbar.outline-open {
-  padding-left: 252px; /* 240px(大纲宽度) + 12px(原padding) */
+.outline-btn {
+  transition: transform 0.3s ease;
+}
+
+.outline-btn.outline-open {
+  transform: translateX(240px);
+}
+
+.editor-main {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+  transition: margin-left 0.3s ease;
+}
+
+.editor-main.outline-open {
+  margin-left: 240px;
 }
 
 .toolbar-btn {
