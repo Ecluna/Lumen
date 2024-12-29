@@ -4,10 +4,10 @@
     <div class="content-area">
       <!-- 工具栏 -->
       <div class="toolbar">
-        <button class="toolbar-btn" @click="toggleOutline" title="大纲">
+        <!-- 大纲按钮 -->
+        <button class="toolbar-btn" @click="toggleOutline" title="大纲视图">
           <svg viewBox="0 0 16 16" width="16" height="16">
-            <path fill="currentColor" d="M2 2.5A1.5 1.5 0 013.5 1h9A1.5 1.5 0 0114 2.5v11a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5v-11zM3.5 2a.5.5 0 00-.5.5v11a.5.5 0 00.5.5h9a.5.5 0 00.5-.5v-11a.5.5 0 00-.5-.5h-9z"/>
-            <path fill="currentColor" d="M6 4.5a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z"/>
+            <path fill="currentColor" d="M2 2.5A.5.5 0 0 1 2.5 2h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z"/>
           </svg>
         </button>
       </div>
@@ -279,13 +279,15 @@ defineExpose({
   border-bottom: 1px solid #e1e4e8;
   display: flex;
   align-items: center;
-  padding: 0 8px;
+  padding: 0 12px;
   background: #f8f9fa;
-  flex-shrink: 0; /* 防止工具栏被压缩 */
+  gap: 8px;
 }
 
 .toolbar-btn {
-  padding: 4px;
+  width: 32px;
+  height: 32px;
+  padding: 8px;
   background: none;
   border: none;
   border-radius: 4px;
@@ -294,11 +296,35 @@ defineExpose({
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .toolbar-btn:hover {
   background: #e1e4e8;
   color: #24292e;
+}
+
+/* Tooltip 样式 */
+.toolbar-btn[title]::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+
+.toolbar-btn[title]:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* 编辑器主体样式 */
