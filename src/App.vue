@@ -12,9 +12,17 @@
 
       <!-- 中间文件状态 -->
       <div class="toolbar-center">
-        <span class="file-status" :class="{ 'untitled': !currentFile }">
-          <span class="status-dot" :class="{ 'unsaved': hasUnsavedChanges }"></span>
-          {{ currentFile ? currentFileName : '未命名文档' }}
+        <span class="file-status" :class="{
+          'welcome-status': isInitialContent,
+          'untitled': !currentFile && !isInitialContent
+        }">
+          <span v-if="!isInitialContent" class="status-dot" :class="{ 'unsaved': hasUnsavedChanges }"></span>
+          <span v-if="isInitialContent" class="welcome-icon">
+            <svg viewBox="0 0 16 16" width="16" height="16">
+              <path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm.25 12.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm1.75-4.5a2.25 2.25 0 0 1-3.75 1.68.75.75 0 1 1 1-.96c.27.28.72.28 1 0a.75.75 0 1 0-1-1.12A.75.75 0 0 1 7 6a2.25 2.25 0 0 1 3-2.12.75.75 0 0 1-.5 1.41 .75.75 0 0 0-1 .71v1.5a.75.75 0 0 1-1.5 0v-1.5a2.25 2.25 0 0 1 3-2.12z"/>
+            </svg>
+          </span>
+          {{ getStatusText }}
         </span>
       </div>
 
@@ -202,6 +210,17 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
+
+// 计算状态文本
+const getStatusText = computed(() => {
+  if (isInitialContent.value) {
+    return '欢迎使用 - 请打开或创建新文件'
+  }
+  if (!currentFile.value) {
+    return '未命名文档'
+  }
+  return currentFileName.value
+})
 </script>
 
 <style>
@@ -305,6 +324,25 @@ body {
   border-radius: 4px;
   background: rgba(175, 184, 193, 0.2);
   transition: all 0.3s ease;
+}
+
+.file-status.welcome-status {
+  color: #0366d6;
+  background: rgba(3, 102, 214, 0.1);
+  border: 1px dashed #0366d6;
+}
+
+.welcome-icon {
+  margin-right: 6px;
+  display: flex;
+  align-items: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
 }
 
 .file-status.untitled {
