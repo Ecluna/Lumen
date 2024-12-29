@@ -2,16 +2,6 @@
   <div class="editor-container">
     <!-- 编辑区域 -->
     <div class="content-area">
-      <!-- 工具栏 -->
-      <div class="toolbar">
-        <!-- 大纲按钮 -->
-        <button class="toolbar-btn outline-btn" :class="{ 'outline-open': showOutline }" @click="toggleOutline" title="大纲视图">
-          <svg viewBox="0 0 16 16" width="16" height="16">
-            <path fill="currentColor" d="M2 2.5A.5.5 0 0 1 2.5 2h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z"/>
-          </svg>
-        </button>
-      </div>
-
       <!-- 编辑器主体 -->
       <div class="editor-main" :class="{ 'outline-open': showOutline }">
         <!-- 大纲侧边栏 -->
@@ -42,6 +32,23 @@
           <div class="preview-wrapper" :style="{ flex: previewFlex }">
             <div class="markdown-body" v-html="htmlContent"></div>
           </div>
+        </div>
+      </div>
+
+      <!-- 底部状态栏 -->
+      <div class="status-bar" :class="{ 'outline-open': showOutline }">
+        <div class="status-left">
+          <button class="status-btn" 
+            :class="{ 'active': showOutline }"
+            @click="toggleOutline" 
+            title="切换大纲">
+            <svg viewBox="0 0 16 16" width="16" height="16">
+              <path fill="currentColor" d="M2 2.5A.5.5 0 0 1 2.5 2h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="status-right">
+          <span class="word-count">0 词</span>
         </div>
       </div>
     </div>
@@ -251,38 +258,28 @@ defineExpose({
 
 .editor-container {
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  height: 100%;
   background: #fff;
 }
 
-/* 侧边栏样式 */
-.sidebar {
-  width: 250px;
-  border-right: 1px solid #e1e4e8;
-  background: #f8f9fa;
-  transition: all 0.3s ease;
-  flex-shrink: 0; /* 防止侧边栏被压缩 */
-}
-
-/* 内容区域样式 */
 .content-area {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  height: 100vh;
+  flex: 1;
+  min-height: 0;
 }
 
-/* 工具栏样式 */
-.toolbar {
-  height: 40px;
-  border-bottom: 1px solid #e1e4e8;
+.editor-main {
   display: flex;
-  align-items: center;
-  padding: 0 12px;
-  background: #f8f9fa;
+  flex: 1;
+  min-height: 0;
   position: relative;
-  z-index: 1;
+  transition: margin-left 0.3s ease;
+}
+
+.editor-main.outline-open {
+  margin-left: 240px;
 }
 
 .outline-btn {
@@ -291,18 +288,6 @@ defineExpose({
 
 .outline-btn.outline-open {
   transform: translateX(240px);
-}
-
-.editor-main {
-  display: flex;
-  height: 100%;
-  min-height: 0;
-  position: relative;
-  transition: margin-left 0.3s ease;
-}
-
-.editor-main.outline-open {
-  margin-left: 240px;
 }
 
 .toolbar-btn {
@@ -346,19 +331,6 @@ defineExpose({
 .toolbar-btn[title]:hover::after {
   opacity: 1;
   visibility: visible;
-}
-
-/* 编辑器主体样式 */
-.editor-main {
-  display: flex;
-  height: 100%;
-  min-height: 0;
-  position: relative;
-  transition: margin-left 0.3s ease;
-}
-
-.editor-main.outline-open {
-  margin-left: 240px;
 }
 
 .outline-sidebar {
@@ -570,5 +542,48 @@ defineExpose({
   width: 240px;
   height: 100%;
   flex-shrink: 0;
+}
+
+/* 状态栏样式 */
+.status-bar {
+  height: 25px;
+  border-top: 1px solid #e1e4e8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: #f8f9fa;
+  font-size: 12px;
+  color: #57606a;
+  transition: margin-left 0.3s ease;
+  flex-shrink: 0;
+}
+
+.status-bar.outline-open {
+  margin-left: 240px;
+}
+
+.status-btn {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: #57606a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-btn:hover {
+  background: #e1e4e8;
+  color: #24292e;
+}
+
+.status-btn.active {
+  background: #e1e4e8;
+  color: #24292e;
 }
 </style> 
