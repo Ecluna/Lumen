@@ -1,7 +1,7 @@
 <template>
   <div class="outline">
     <div class="outline-header">
-      <span>文件</span>
+      <span>大纲</span>
     </div>
     <div class="outline-content">
       <div v-for="(item, index) in outlineItems" 
