@@ -21,7 +21,7 @@
 
       <!-- 编辑器主体 -->
       <div class="editor-main">
-        <div class="editor-wrapper">
+        <div class="editor-wrapper" :style="{ flex: editorFlex }">
           <textarea
             v-model="markdownContent"
             class="markdown-input"
@@ -31,7 +31,11 @@
             placeholder="请输入 Markdown 内容..."
           ></textarea>
         </div>
-        <div class="preview-wrapper">
+        <div class="resize-handle" 
+          @mousedown="startResize"
+          @dblclick="resetSize">
+        </div>
+        <div class="preview-wrapper" :style="{ flex: previewFlex }">
           <div class="markdown-body" v-html="htmlContent"></div>
         </div>
       </div>
@@ -146,6 +150,57 @@ onMounted(() => {
   handleInput()
 })
 
+// 拖动相关状态
+const editorFlex = ref(1)
+const previewFlex = ref(1)
+let isResizing = false
+let startX = 0
+let startEditorFlex = 0
+let startPreviewFlex = 0
+
+// 开始拖动
+const startResize = (e) => {
+  isResizing = true
+  startX = e.clientX
+  startEditorFlex = editorFlex.value
+  startPreviewFlex = previewFlex.value
+  
+  document.addEventListener('mousemove', handleResize)
+  document.addEventListener('mouseup', stopResize)
+  document.body.style.cursor = 'col-resize'
+}
+
+// 处理拖动
+const handleResize = (e) => {
+  if (!isResizing) return
+  
+  const dx = e.clientX - startX
+  const totalWidth = document.querySelector('.editor-main').offsetWidth
+  const ratio = dx / totalWidth
+  
+  const newEditorFlex = startEditorFlex + ratio
+  const newPreviewFlex = startPreviewFlex - ratio
+  
+  if (newEditorFlex >= 0.2 && newPreviewFlex >= 0.2) {
+    editorFlex.value = newEditorFlex
+    previewFlex.value = newPreviewFlex
+  }
+}
+
+// 停止拖动
+const stopResize = () => {
+  isResizing = false
+  document.removeEventListener('mousemove', handleResize)
+  document.removeEventListener('mouseup', stopResize)
+  document.body.style.cursor = ''
+}
+
+// 双击重置大小
+const resetSize = () => {
+  editorFlex.value = 1
+  previewFlex.value = 1
+}
+
 defineExpose({
   setContent,
   getContent
@@ -209,17 +264,19 @@ defineExpose({
 
 /* 编辑器主体样式 */
 .editor-main {
-  flex: 1;
   display: flex;
+  height: 100%;
   min-height: 0;
+  user-select: none;
 }
 
 /* 编辑器和预览区域基础样式 */
 .editor-wrapper,
 .preview-wrapper {
   flex: 1;
-  position: relative;
+  min-width: 0;
   overflow: hidden;
+  user-select: text;
 }
 
 .preview-wrapper {
@@ -376,5 +433,22 @@ defineExpose({
 .markdown-input::-webkit-scrollbar-button,
 .markdown-body::-webkit-scrollbar-button {
   display: none;
+}
+
+/* 拖动条样式 */
+.resize-handle {
+  width: 5px;
+  background-color: transparent;
+  cursor: col-resize;
+  transition: background-color 0.2s;
+}
+
+.resize-handle:hover {
+  background-color: #e1e4e8;
+}
+
+/* 拖动时的样式 */
+.resize-handle:active {
+  background-color: #0366d6;
 }
 </style> 
