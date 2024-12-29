@@ -652,4 +652,15 @@ defineExpose({
 .status-btn[title]::after {
   display: none; /* 禁用重复的 tooltip */
 }
+
+/* 修改预览区域代码块字体 */
+.markdown-body pre,
+.markdown-body code {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* 确保行内代码也使用相同字体 */
+.markdown-body :not(pre) > code {
+  font-family: 'JetBrains Mono', monospace;
+}
 </style> 
