@@ -72,7 +72,15 @@
         "digestAlgorithm": "sha256",
         "timestampUrl": "",
         "wix": {
-          "language": ["zh-CN"]
+          "language": "zh-CN",
+          "template": "WXS",
+          "fragmentPaths": [],
+          "componentGroups": [],
+          "properties": {
+            "UpgradeCode": "5B4C1F90-B453-4D76-8F70-9E1E2DBD3962",
+            "ProductName": "Lumen",
+            "Manufacturer": "Ecluna"
+          }
         }
       }
     },
