@@ -324,20 +324,27 @@ defineExpose({
 .editor-wrapper::-webkit-scrollbar,
 .preview-wrapper::-webkit-scrollbar,
 .markdown-input::-webkit-scrollbar {
-  width: 6px; /* 更窄的滚动条 */
+  width: 6px;
   height: 6px;
+}
+
+/* 移除上下箭头按钮 */
+.editor-wrapper::-webkit-scrollbar-button,
+.preview-wrapper::-webkit-scrollbar-button,
+.markdown-input::-webkit-scrollbar-button {
+  display: none;
 }
 
 .editor-wrapper::-webkit-scrollbar-track,
 .preview-wrapper::-webkit-scrollbar-track,
 .markdown-input::-webkit-scrollbar-track {
-  background: transparent; /* 透明轨道 */
+  background: transparent;
 }
 
 .editor-wrapper::-webkit-scrollbar-thumb,
 .preview-wrapper::-webkit-scrollbar-thumb,
 .markdown-input::-webkit-scrollbar-thumb {
-  background: #ccc; /* 浅灰色滑块 */
+  background: #ccc;
   border-radius: 3px;
   transition: background 0.2s ease;
 }
