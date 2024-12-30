@@ -11,7 +11,9 @@
     "build:windows": "npm run build && npm run tauri build -- --target x86_64-pc-windows-msvc",
     "build:macos-arm": "npm run build && npm run tauri build -- --target aarch64-apple-darwin",
     "build:macos-x64": "npm run build && npm run tauri build -- --target x86_64-apple-darwin",
-    "build:macos": "npm run build && npm run tauri build -- --target universal-apple-darwin"
+    "build:macos": "npm run build && npm run tauri build -- --target universal-apple-darwin",
+    "build:linux-deb": "npm run build && npm run tauri build -- --target x86_64-unknown-linux-gnu",
+    "build:linux-appimage": "npm run build && npm run tauri build -- --target x86_64-unknown-linux-gnu --bundles appimage"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.2",
