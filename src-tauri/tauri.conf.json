@@ -44,11 +44,7 @@
       "copyright": "Copyright © 2024 Ecluna",
       "deb": {
         "depends": [],
-        "files": {
-          "/usr/share/applications/com.ecluna.lumen.desktop": {
-            "content": "[Desktop Entry]\nName=Lumen\nExec=lumen\nIcon=com.ecluna.lumen\nType=Application\nCategories=Development;TextEditor;"
-          }
-        }
+        "desktop-template": "[Desktop Entry]\nName=Lumen\nExec=lumen\nIcon=com.ecluna.lumen\nType=Application\nCategories=Development;TextEditor;"
       },
       "appimage": {
         "bundleMediaFramework": true
